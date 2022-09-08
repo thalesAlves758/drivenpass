@@ -26,3 +26,10 @@ model Safe_Note {
 
   @@unique([id, title])
 }
+
+model WiFi {
+  id       Int    @id @default(autoincrement())
+  name     String @db.VarChar(80)
+  password String
+  tag      String @db.VarChar(30)
+}

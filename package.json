@@ -4,7 +4,8 @@
   "description": "A password manager API",
   "main": "src/index.ts",
   "scripts": {
-    "start": "ts-node src/index.ts",
+    "start": "node dist/index.js",
+    "build": "tsc",
     "dev": "nodemon src/index.ts"
   },
   "repository": {

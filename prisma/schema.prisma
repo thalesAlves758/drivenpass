@@ -11,13 +11,16 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique @db.VarChar(80)
-  password String
+  id        Int         @id @default(autoincrement())
+  email     String      @unique @db.VarChar(80)
+  password  String
+  Safe_Note Safe_Note[]
 }
 
 model Safe_Note {
-  id    Int    @id @default(autoincrement())
-  title String @db.VarChar(50)
-  note  String @db.VarChar(1000)
+  id     Int    @id @default(autoincrement())
+  title  String @db.VarChar(50)
+  note   String @db.VarChar(1000)
+  user   User   @relation(fields: [userId], references: [id])
+  userId Int
 }

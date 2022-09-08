@@ -11,11 +11,12 @@ datasource db {
 }
 
 model User {
-  id        Int        @id @default(autoincrement())
-  email     String     @unique @db.VarChar(80)
-  password  String
-  safeNotes SafeNote[]
-  wifi      WiFi[]
+  id          Int          @id @default(autoincrement())
+  email       String       @unique @db.VarChar(80)
+  password    String
+  safeNotes   SafeNote[]
+  wifi        WiFi[]
+  credentials Credential[]
 }
 
 model SafeNote {
@@ -43,6 +44,8 @@ model Credential {
   url      String
   username String
   password String
+  User     User   @relation(fields: [userId], references: [id])
+  userId   Int
 
   @@unique([id, tag])
 }

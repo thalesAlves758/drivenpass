@@ -36,3 +36,13 @@ model WiFi {
   User     User   @relation(fields: [userId], references: [id])
   userId   Int
 }
+
+model Credential {
+  id       Int    @id @default(autoincrement())
+  tag      String @db.VarChar(50)
+  url      String
+  username String
+  password String
+
+  @@unique([id, tag])
+}

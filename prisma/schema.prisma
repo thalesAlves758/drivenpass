@@ -15,6 +15,7 @@ model User {
   email     String      @unique @db.VarChar(80)
   password  String
   Safe_Note Safe_Note[]
+  wifi      WiFi[]
 }
 
 model Safe_Note {
@@ -32,4 +33,6 @@ model WiFi {
   name     String @db.VarChar(80)
   password String
   tag      String @db.VarChar(30)
+  User     User   @relation(fields: [userId], references: [id])
+  userId   Int
 }

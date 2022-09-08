@@ -23,4 +23,6 @@ model Safe_Note {
   note   String @db.VarChar(1000)
   user   User   @relation(fields: [userId], references: [id])
   userId Int
+
+  @@unique([id, title])
 }

@@ -17,6 +17,7 @@ model User {
   safeNotes   SafeNote[]
   wifi        WiFi[]
   credentials Credential[]
+  cards       Card[]
 }
 
 model SafeNote {
@@ -65,6 +66,8 @@ model Card {
   password       String  @db.VarChar(6)
   virtual        Boolean @default(false)
   type           Type
+  User           User    @relation(fields: [userId], references: [id])
+  userId         Int
 
   @@unique([id, tag])
 }

@@ -49,3 +49,22 @@ model Credential {
 
   @@unique([id, tag])
 }
+
+enum Type {
+  CREDIT
+  DEBIT
+  BOTH
+}
+
+model Card {
+  id             Int     @id @default(autoincrement())
+  tag            String  @db.VarChar(50)
+  number         String  @db.VarChar(16)
+  cardholderName String  @db.VarChar(35)
+  securityCode   String  @db.Char(3)
+  password       String  @db.VarChar(6)
+  virtual        Boolean @default(false)
+  type           Type
+
+  @@unique([id, tag])
+}

@@ -1,6 +1,7 @@
 import { HttpError } from '../exceptions/HttpException';
 import {
   create,
+  deleteById,
   findByIdAndUserId,
   findByTagAndUserId,
   findFromUserId,
@@ -58,7 +59,7 @@ export async function findCredentialsFromUserId(
   return decryptPasswords(await findFromUserId(userId));
 }
 
-export async function findCredentialByIdAndUserId(
+async function getCredentialIfExists(
   userId: number,
   credentialId: number
 ): Promise<CredentialResponseData> {
@@ -74,7 +75,28 @@ export async function findCredentialByIdAndUserId(
     );
   }
 
+  return credential;
+}
+
+export async function findCredentialByIdAndUserId(
+  userId: number,
+  credentialId: number
+): Promise<CredentialResponseData> {
+  const credential: CredentialResponseData = await getCredentialIfExists(
+    userId,
+    credentialId
+  );
+
   const [mappedCredential] = decryptPasswords([credential]);
 
   return mappedCredential;
+}
+
+export async function deleteCredentialById(
+  userId: number,
+  credentialId: number
+): Promise<void> {
+  await getCredentialIfExists(userId, credentialId);
+
+  await deleteById(credentialId);
 }

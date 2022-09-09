@@ -18,18 +18,30 @@ export async function create(data: CredentialInsertData): Promise<void> {
   await prisma.credential.create({ data });
 }
 
+const selectFields = {
+  id: true,
+  tag: true,
+  url: true,
+  username: true,
+  password: true,
+};
+
 export async function findFromUserId(
   userId: number
 ): Promise<CredentialResponseData[]> {
   return prisma.credential.findMany({
-    select: {
-      id: true,
-      tag: true,
-      url: true,
-      username: true,
-      password: true,
-    },
+    select: selectFields,
     where: { userId },
     orderBy: { id: 'desc' },
+  });
+}
+
+export async function findByIdAndUserId(
+  userId: number,
+  credentialId: number
+): Promise<CredentialResponseData | null> {
+  return prisma.credential.findFirst({
+    select: selectFields,
+    where: { userId, AND: { id: credentialId } },
   });
 }

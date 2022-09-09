@@ -12,5 +12,10 @@ credentialsRouter.post(
   validateSchema(credentialSchema),
   credentialController.create
 );
+credentialsRouter.get(
+  '/credentials',
+  validateToken,
+  credentialController.getAll
+);
 
 export default credentialsRouter;

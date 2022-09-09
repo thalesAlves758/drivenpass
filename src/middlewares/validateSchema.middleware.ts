@@ -1,6 +1,6 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express';
 import { Schema } from 'joi';
-import HttpStatus from '../utils/httpStatus';
+import { HttpStatus } from '../types/http.types';
 
 function validateSchema(schema: Schema): RequestHandler {
   return (req: Request, res: Response, next: NextFunction) => {

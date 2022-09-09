@@ -1,9 +1,10 @@
+import { User } from '@prisma/client';
 import { NextFunction, Request, Response } from 'express';
 import { JwtPayload } from 'jsonwebtoken';
 import { HttpError } from '../exceptions/HttpException';
 import { findUserById } from '../services/user.services';
 import { HttpErrorType } from '../types/http.types';
-import { JwtUserPayload, UserData } from '../types/user.types';
+import { JwtUserPayload } from '../types/user.types';
 import { validateToken as validate } from '../utils/jwtFunctions';
 
 function checkToken(token: string | undefined) {
@@ -26,9 +27,11 @@ async function validateToken(req: Request, res: Response, next: NextFunction) {
 
   const { userId } = checkToken(token) as JwtUserPayload;
 
-  const user: UserData = await findUserById(userId);
+  const user: Partial<User> = await findUserById(userId);
 
-  res.locals = user;
+  delete user.password;
+
+  res.locals = { user };
 
   next();
 }

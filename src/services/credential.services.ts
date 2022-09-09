@@ -2,10 +2,14 @@ import { HttpError } from '../exceptions/HttpException';
 import {
   create,
   findByTagAndUserId,
+  findFromUserId,
 } from '../repositories/credential.repository';
-import { CredentialInsertData } from '../types/credential.types';
+import {
+  CredentialInsertData,
+  CredentialResponseData,
+} from '../types/credential.types';
 import { HttpErrorType } from '../types/http.types';
-import { encryptText } from '../utils/cryptrFunctions';
+import { decryptText, encryptText } from '../utils/cryptrFunctions';
 
 async function validateTagExists(userId: number, tag: string): Promise<void> {
   const credential = await findByTagAndUserId(userId, tag);
@@ -36,4 +40,19 @@ export async function createCredential({
   };
 
   await create(newCredential);
+}
+
+function decryptPasswords(
+  credentials: CredentialResponseData[]
+): CredentialResponseData[] {
+  return credentials.map((credential) => ({
+    ...credential,
+    password: decryptText(credential.password),
+  }));
+}
+
+export async function findCredentialsFromUserId(
+  userId: number
+): Promise<CredentialResponseData[]> {
+  return decryptPasswords(await findFromUserId(userId));
 }

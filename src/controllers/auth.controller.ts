@@ -10,3 +10,11 @@ export async function signUp(req: Request, res: Response) {
 
   res.sendStatus(HttpStatus.CREATED);
 }
+
+export async function signIn(req: Request, res: Response) {
+  const authData: AuthData = req.body;
+
+  const token: string = await authServices.signIn(authData);
+
+  res.send({ token });
+}

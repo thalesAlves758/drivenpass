@@ -5,3 +5,7 @@ export function encryptPassword(password: string): string {
 
   return bcrypt.hashSync(password, salt);
 }
+
+export function validatePassword(encrypted: string, password: string): boolean {
+  return bcrypt.compareSync(password, encrypted);
+}

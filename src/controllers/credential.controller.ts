@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import {
   createCredential,
+  deleteCredentialById,
   findCredentialByIdAndUserId,
   findCredentialsFromUserId,
 } from '../services/credential.services';
@@ -46,4 +47,13 @@ export async function getById(req: Request, res: Response) {
   );
 
   res.send(credential);
+}
+
+export async function deleteById(req: Request, res: Response) {
+  const { id: userId }: UserData = res.locals.user;
+  const credentialId: number = Number(req.params.id);
+
+  await deleteCredentialById(userId, credentialId);
+
+  res.sendStatus(HttpStatus.NO_CONTENT);
 }

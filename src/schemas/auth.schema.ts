@@ -1,9 +1,9 @@
 import Joi from 'joi';
-import { IAuthData } from '../types/user.types';
+import { AuthData } from '../types/user.types';
 
 const MINIMUM = 10;
 
-const authSchema = Joi.object<IAuthData>({
+const authSchema = Joi.object<AuthData>({
   email: Joi.string().email().required(),
   password: Joi.string().min(MINIMUM).required(),
 });

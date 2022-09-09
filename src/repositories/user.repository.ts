@@ -9,3 +9,7 @@ export async function findByEmail(email: string): Promise<User | null> {
 export async function create({ email, password }: AuthData): Promise<void> {
   await prisma.user.create({ data: { email, password } });
 }
+
+export async function findById(id: number): Promise<User | null> {
+  return prisma.user.findUnique({ where: { id } });
+}

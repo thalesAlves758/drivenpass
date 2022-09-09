@@ -1,6 +1,7 @@
 import { HttpError } from '../exceptions/HttpException';
 import {
   create,
+  findByIdAndUserId,
   findByTagAndUserId,
   findFromUserId,
 } from '../repositories/credential.repository';
@@ -55,4 +56,25 @@ export async function findCredentialsFromUserId(
   userId: number
 ): Promise<CredentialResponseData[]> {
   return decryptPasswords(await findFromUserId(userId));
+}
+
+export async function findCredentialByIdAndUserId(
+  userId: number,
+  credentialId: number
+): Promise<CredentialResponseData> {
+  const credential: CredentialResponseData | null = await findByIdAndUserId(
+    userId,
+    credentialId
+  );
+
+  if (!credential) {
+    throw HttpError(
+      HttpErrorType.NOT_FOUND,
+      `Could not find specified credential`
+    );
+  }
+
+  const [mappedCredential] = decryptPasswords([credential]);
+
+  return mappedCredential;
 }

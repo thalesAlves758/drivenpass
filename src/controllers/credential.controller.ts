@@ -1,8 +1,12 @@
 import { Request, Response } from 'express';
-import { createCredential } from '../services/credential.services';
+import {
+  createCredential,
+  findCredentialsFromUserId,
+} from '../services/credential.services';
 import {
   CredentialBodyData,
   CredentialInsertData,
+  CredentialResponseData,
 } from '../types/credential.types';
 import { HttpStatus } from '../types/http.types';
 import { UserData } from '../types/user.types';
@@ -19,4 +23,14 @@ export async function create(req: Request, res: Response) {
   await createCredential(insertData);
 
   res.sendStatus(HttpStatus.CREATED);
+}
+
+export async function getAll(req: Request, res: Response) {
+  const { id: userId }: UserData = res.locals.user;
+
+  const credentials: CredentialResponseData[] = await findCredentialsFromUserId(
+    userId
+  );
+
+  res.send(credentials);
 }

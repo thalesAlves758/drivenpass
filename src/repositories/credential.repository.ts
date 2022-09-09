@@ -45,3 +45,7 @@ export async function findByIdAndUserId(
     where: { userId, AND: { id: credentialId } },
   });
 }
+
+export async function deleteById(credentialId: number): Promise<void> {
+  await prisma.credential.delete({ where: { id: credentialId } });
+}

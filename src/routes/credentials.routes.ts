@@ -17,5 +17,10 @@ credentialsRouter.get(
   validateToken,
   credentialController.getAll
 );
+credentialsRouter.get(
+  '/credentials/:id',
+  validateToken,
+  credentialController.getById
+);
 
 export default credentialsRouter;

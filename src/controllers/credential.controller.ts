@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import {
   createCredential,
+  findCredentialByIdAndUserId,
   findCredentialsFromUserId,
 } from '../services/credential.services';
 import {
@@ -33,4 +34,16 @@ export async function getAll(req: Request, res: Response) {
   );
 
   res.send(credentials);
+}
+
+export async function getById(req: Request, res: Response) {
+  const { id: userId }: UserData = res.locals.user;
+  const credentialId: number = Number(req.params.id);
+
+  const credential: CredentialResponseData = await findCredentialByIdAndUserId(
+    userId,
+    credentialId
+  );
+
+  res.send(credential);
 }

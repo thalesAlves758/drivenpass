@@ -1,6 +1,7 @@
 import { SafeNote } from '@prisma/client';
 import { HttpError } from '../exceptions/HttpException';
 import {
+  findByIdAndUserId,
   findByTitleAndUserId,
   findFromUserId,
   insert,
@@ -49,4 +50,35 @@ export async function findSafeNotesFromUserId(
     note: true,
     title: true,
   })) as SafeNoteResponseData[];
+}
+
+async function getSafeNoteIfExists(
+  userId: number,
+  safeNoteId: number
+): Promise<SafeNoteResponseData> {
+  const safeNote: SafeNoteResponseData | null = (await findByIdAndUserId(
+    userId,
+    safeNoteId,
+    {
+      id: true,
+      note: true,
+      title: true,
+    }
+  )) as SafeNoteResponseData | null;
+
+  if (!safeNote) {
+    throw HttpError(
+      HttpErrorType.NOT_FOUND,
+      `Could not find specified safe note`
+    );
+  }
+
+  return safeNote;
+}
+
+export async function findSafeNoteByIdAndUserId(
+  userId: number,
+  safeNoteId: number
+): Promise<SafeNoteResponseData> {
+  return getSafeNoteIfExists(userId, safeNoteId);
 }

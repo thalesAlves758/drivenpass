@@ -39,3 +39,19 @@ export async function findFromUserId(
     where: { userId },
   });
 }
+
+export async function findByIdAndUserId(
+  userId: number,
+  safeNoteId: number,
+  selectedFields: SelectFields = {
+    id: true,
+    note: true,
+    title: true,
+    userId: true,
+  }
+): Promise<Partial<SafeNote> | null> {
+  return prisma.safeNote.findFirst({
+    select: selectedFields,
+    where: { userId, AND: { id: safeNoteId } },
+  });
+}

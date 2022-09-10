@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import {
   createSafeNote,
+  deleteSafeNoteById,
   findSafeNoteByIdAndUserId,
   findSafeNotesFromUserId,
 } from '../services/safeNote.services';
@@ -46,4 +47,13 @@ export async function getById(req: Request, res: Response) {
   );
 
   res.send(safeNote);
+}
+
+export async function deleteById(req: Request, res: Response) {
+  const { id: userId }: UserData = res.locals.user;
+  const safeNoteId: number = Number(req.params.id);
+
+  await deleteSafeNoteById(userId, safeNoteId);
+
+  res.sendStatus(HttpStatus.NO_CONTENT);
 }

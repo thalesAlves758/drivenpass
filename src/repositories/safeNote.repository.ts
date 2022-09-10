@@ -55,3 +55,7 @@ export async function findByIdAndUserId(
     where: { userId, AND: { id: safeNoteId } },
   });
 }
+
+export async function deleteById(safeNoteId: number): Promise<void> {
+  await prisma.safeNote.delete({ where: { id: safeNoteId } });
+}

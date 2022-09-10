@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import {
   createSafeNote,
+  findSafeNoteByIdAndUserId,
   findSafeNotesFromUserId,
 } from '../services/safeNote.services';
 import { HttpStatus } from '../types/http.types';
@@ -33,4 +34,16 @@ export async function getAll(req: Request, res: Response) {
   );
 
   res.send(safeNotes);
+}
+
+export async function getById(req: Request, res: Response) {
+  const { id: userId }: UserData = res.locals.user;
+  const safeNoteId: number = Number(req.params.id);
+
+  const safeNote: SafeNoteResponseData = await findSafeNoteByIdAndUserId(
+    userId,
+    safeNoteId
+  );
+
+  res.send(safeNote);
 }

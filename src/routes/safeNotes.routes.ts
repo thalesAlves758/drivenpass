@@ -13,5 +13,10 @@ safeNotesRouter.post(
   safeNoteController.create
 );
 safeNotesRouter.get('/safe-notes', validateToken, safeNoteController.getAll);
+safeNotesRouter.get(
+  '/safe-notes/:id',
+  validateToken,
+  safeNoteController.getById
+);
 
 export default safeNotesRouter;

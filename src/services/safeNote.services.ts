@@ -1,6 +1,7 @@
 import { SafeNote } from '@prisma/client';
 import { HttpError } from '../exceptions/HttpException';
 import {
+  deleteById,
   findByIdAndUserId,
   findByTitleAndUserId,
   findFromUserId,
@@ -81,4 +82,13 @@ export async function findSafeNoteByIdAndUserId(
   safeNoteId: number
 ): Promise<SafeNoteResponseData> {
   return getSafeNoteIfExists(userId, safeNoteId);
+}
+
+export async function deleteSafeNoteById(
+  userId: number,
+  safeNoteId: number
+): Promise<void> {
+  await getSafeNoteIfExists(userId, safeNoteId);
+
+  await deleteById(safeNoteId);
 }

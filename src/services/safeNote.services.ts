@@ -2,10 +2,14 @@ import { SafeNote } from '@prisma/client';
 import { HttpError } from '../exceptions/HttpException';
 import {
   findByTitleAndUserId,
+  findFromUserId,
   insert,
 } from '../repositories/safeNote.repository';
 import { HttpErrorType } from '../types/http.types';
-import { SafeNoteInsertData } from '../types/safeNode.types';
+import {
+  SafeNoteInsertData,
+  SafeNoteResponseData,
+} from '../types/safeNode.types';
 
 async function validateSafeNoteExists(
   userId: number,
@@ -35,4 +39,14 @@ export async function createSafeNote({
   };
 
   await insert(newSafeNote);
+}
+
+export async function findSafeNotesFromUserId(
+  userId: number
+): Promise<SafeNoteResponseData[]> {
+  return (await findFromUserId(userId, {
+    id: true,
+    note: true,
+    title: true,
+  })) as SafeNoteResponseData[];
 }

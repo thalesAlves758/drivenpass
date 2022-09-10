@@ -1,9 +1,6 @@
 import { SafeNote } from '@prisma/client';
 import { prisma } from '../config/database';
-import {
-  SafeNoteInsertData,
-  SafeNoteResponseData,
-} from '../types/safeNode.types';
+import { SafeNoteInsertData } from '../types/safeNode.types';
 
 export async function findByTitleAndUserId(
   userId: number,
@@ -33,7 +30,7 @@ export async function findFromUserId(
     title: true,
     userId: true,
   }
-): Promise<Partial<SafeNoteResponseData>[]> {
+): Promise<Partial<SafeNote>[]> {
   return prisma.safeNote.findMany({
     select: selectedFields,
     where: { userId },

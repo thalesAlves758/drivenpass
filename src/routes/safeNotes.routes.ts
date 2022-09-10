@@ -12,5 +12,6 @@ safeNotesRouter.post(
   validateSchema(safeNoteSchema),
   safeNoteController.create
 );
+safeNotesRouter.get('/safe-notes', validateToken, safeNoteController.getAll);
 
 export default safeNotesRouter;

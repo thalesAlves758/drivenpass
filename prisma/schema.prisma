@@ -27,7 +27,7 @@ model SafeNote {
   User   User   @relation(fields: [userId], references: [id])
   userId Int
 
-  @@unique([id, title])
+  @@unique([title, userId])
 }
 
 model WiFi {

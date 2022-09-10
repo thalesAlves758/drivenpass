@@ -10,7 +10,7 @@ export async function findByTagAndUserId(
   tag: string
 ): Promise<Credential | null> {
   return prisma.credential.findUnique({
-    where: { id_tag: { id: userId, tag } },
+    where: { tag_userId: { userId, tag } },
   });
 }
 

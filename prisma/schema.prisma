@@ -27,7 +27,7 @@ model SafeNote {
   User   User   @relation(fields: [userId], references: [id])
   userId Int
 
-  @@unique([id, title])
+  @@unique([title, userId])
 }
 
 model WiFi {
@@ -48,7 +48,7 @@ model Credential {
   User     User   @relation(fields: [userId], references: [id])
   userId   Int
 
-  @@unique([id, tag])
+  @@unique([tag, userId])
 }
 
 enum Type {
@@ -69,5 +69,5 @@ model Card {
   User           User    @relation(fields: [userId], references: [id])
   userId         Int
 
-  @@unique([id, tag])
+  @@unique([tag, userId])
 }

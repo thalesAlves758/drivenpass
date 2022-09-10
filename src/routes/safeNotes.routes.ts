@@ -18,5 +18,10 @@ safeNotesRouter.get(
   validateToken,
   safeNoteController.getById
 );
+safeNotesRouter.delete(
+  '/safe-notes/:id',
+  validateToken,
+  safeNoteController.deleteById
+);
 
 export default safeNotesRouter;

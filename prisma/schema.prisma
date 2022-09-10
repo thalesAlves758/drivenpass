@@ -48,7 +48,7 @@ model Credential {
   User     User   @relation(fields: [userId], references: [id])
   userId   Int
 
-  @@unique([id, tag])
+  @@unique([tag, userId])
 }
 
 enum Type {

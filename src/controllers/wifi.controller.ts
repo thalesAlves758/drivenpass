@@ -1,8 +1,12 @@
 import { Request, Response } from 'express';
-import { createWifi } from '../services/wifi.services';
+import { createWifi, findWifiFromUserId } from '../services/wifi.services';
 import { HttpStatus } from '../types/http.types';
 import { UserData } from '../types/user.types';
-import { WiFiBodyData, WiFInsertData } from '../types/wifi.types';
+import {
+  WiFiBodyData,
+  WiFInsertData,
+  WiFiResponseData,
+} from '../types/wifi.types';
 
 export async function create(req: Request, res: Response) {
   const { id: userId }: UserData = res.locals.user;
@@ -16,4 +20,12 @@ export async function create(req: Request, res: Response) {
   await createWifi(insertData);
 
   res.sendStatus(HttpStatus.CREATED);
+}
+
+export async function getAll(req: Request, res: Response) {
+  const { id: userId }: UserData = res.locals.user;
+
+  const wifi: WiFiResponseData[] = await findWifiFromUserId(userId);
+
+  res.send(wifi);
 }

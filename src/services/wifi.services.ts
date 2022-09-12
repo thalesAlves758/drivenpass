@@ -6,8 +6,12 @@ import {
   insert,
 } from '../repositories/wifi.repository';
 import { HttpErrorType } from '../types/http.types';
-import { WiFInsertData, WiFiResponseData } from '../types/wifi.types';
-import { decryptText, encryptText } from '../utils/cryptrFunctions';
+import {
+  WiFiEncryptedFields,
+  WiFInsertData,
+  WiFiResponseData,
+} from '../types/wifi.types';
+import { decryptFromArrayObject, encryptText } from '../utils/cryptrFunctions';
 
 export async function createWifi(insertData: WiFInsertData): Promise<void> {
   const { password } = insertData;
@@ -20,24 +24,19 @@ export async function createWifi(insertData: WiFInsertData): Promise<void> {
   await insert(newWifi);
 }
 
-function decryptPasswords(wifi: WiFiResponseData[]): WiFiResponseData[] {
-  return wifi.map((currentWifi) => ({
-    ...currentWifi,
-    password: decryptText(currentWifi.password),
-  }));
-}
-
 export async function findWifiFromUserId(
   userId: number
 ): Promise<WiFiResponseData[]> {
-  return decryptPasswords(
-    (await findFromUserId(userId, {
-      id: true,
-      name: true,
-      password: true,
-      tag: true,
-    })) as WiFiResponseData[]
-  );
+  const wifi: WiFiResponseData[] = (await findFromUserId(userId, {
+    id: true,
+    name: true,
+    password: true,
+    tag: true,
+  })) as WiFiResponseData[];
+
+  return decryptFromArrayObject<WiFiResponseData, WiFiEncryptedFields>(wifi, {
+    password: true,
+  });
 }
 
 async function getWifiIfExists(
@@ -71,9 +70,12 @@ export async function findWifiByIdAndUserId(
 ): Promise<WiFiResponseData> {
   const wifi: WiFiResponseData = await getWifiIfExists(userId, wifiId);
 
-  const [mappedWifi] = decryptPasswords([wifi]);
+  const [decryptedWifi] = decryptFromArrayObject<
+    WiFiResponseData,
+    WiFiEncryptedFields
+  >([wifi], { password: true });
 
-  return mappedWifi;
+  return decryptedWifi;
 }
 
 export async function deleteWifiById(

@@ -11,7 +11,7 @@ import { HttpErrorType } from '../types/http.types';
 import {
   SafeNoteInsertData,
   SafeNoteResponseData,
-} from '../types/safeNode.types';
+} from '../types/safeNote.types';
 
 async function validateSafeNoteExists(
   userId: number,

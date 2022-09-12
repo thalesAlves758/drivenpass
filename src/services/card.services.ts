@@ -7,9 +7,13 @@ import {
   findFromUserId,
   insert,
 } from '../repositories/card.repository';
-import { CardInsertData, CardResponseData } from '../types/card.types';
+import {
+  CardEncryptedFields,
+  CardInsertData,
+  CardResponseData,
+} from '../types/card.types';
 import { HttpErrorType } from '../types/http.types';
-import { encryptText } from '../utils/cryptrFunctions';
+import { decryptFromArrayObject, encryptText } from '../utils/cryptrFunctions';
 
 async function validateCardExists(userId: number, tag: string): Promise<void> {
   const card: Card | null = await findByTagAndUserId(userId, tag);
@@ -39,7 +43,7 @@ export async function createCard(insertData: CardInsertData): Promise<void> {
 export async function findCardsFromUserId(
   userId: number
 ): Promise<CardResponseData[]> {
-  return (await findFromUserId(userId, {
+  const cards: CardResponseData[] = (await findFromUserId(userId, {
     id: true,
     tag: true,
     number: true,
@@ -49,6 +53,11 @@ export async function findCardsFromUserId(
     virtual: true,
     type: true,
   })) as CardResponseData[];
+
+  return decryptFromArrayObject<CardResponseData, CardEncryptedFields>(cards, {
+    password: true,
+    securityCode: true,
+  });
 }
 
 async function getCardIfExists(
@@ -81,7 +90,14 @@ export async function findCardByIdAndUserId(
   userId: number,
   cardId: number
 ): Promise<CardResponseData> {
-  return getCardIfExists(userId, cardId);
+  const card: CardResponseData = await getCardIfExists(userId, cardId);
+
+  const [decryptedCard] = decryptFromArrayObject<
+    CardResponseData,
+    CardEncryptedFields
+  >([card], { password: true, securityCode: true });
+
+  return decryptedCard;
 }
 
 export async function deleteCardById(

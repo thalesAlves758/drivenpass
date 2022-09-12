@@ -1,6 +1,7 @@
 import { Card } from '@prisma/client';
 import { HttpError } from '../exceptions/HttpException';
 import {
+  findByIdAndUserId,
   findByTagAndUserId,
   findFromUserId,
   insert,
@@ -47,4 +48,37 @@ export async function findCardsFromUserId(
     virtual: true,
     type: true,
   })) as CardResponseData[];
+}
+
+async function getCardIfExists(
+  userId: number,
+  cardId: number
+): Promise<CardResponseData> {
+  const card: CardResponseData | null = (await findByIdAndUserId(
+    userId,
+    cardId,
+    {
+      id: true,
+      tag: true,
+      number: true,
+      cardholderName: true,
+      securityCode: true,
+      password: true,
+      virtual: true,
+      type: true,
+    }
+  )) as CardResponseData | null;
+
+  if (!card) {
+    throw HttpError(HttpErrorType.NOT_FOUND, `Could not find specified card`);
+  }
+
+  return card;
+}
+
+export async function findCardByIdAndUserId(
+  userId: number,
+  cardId: number
+): Promise<CardResponseData> {
+  return getCardIfExists(userId, cardId);
 }

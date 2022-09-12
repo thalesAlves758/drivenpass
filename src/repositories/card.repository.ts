@@ -65,3 +65,7 @@ export async function findByIdAndUserId(
     where: { userId, AND: { id: cardId } },
   });
 }
+
+export async function deleteById(cardId: number): Promise<void> {
+  await prisma.card.delete({ where: { id: cardId } });
+}

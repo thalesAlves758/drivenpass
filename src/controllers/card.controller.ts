@@ -1,5 +1,9 @@
 import { Request, Response } from 'express';
-import { createCard, findCardsFromUserId } from '../services/card.services';
+import {
+  createCard,
+  findCardByIdAndUserId,
+  findCardsFromUserId,
+} from '../services/card.services';
 import {
   CardBodyData,
   CardInsertData,
@@ -28,4 +32,13 @@ export async function getAll(req: Request, res: Response) {
   const cards: CardResponseData[] = await findCardsFromUserId(userId);
 
   res.send(cards);
+}
+
+export async function getById(req: Request, res: Response) {
+  const { id: userId }: UserData = res.locals.user;
+  const cardId: number = Number(req.params.id);
+
+  const card: CardResponseData = await findCardByIdAndUserId(userId, cardId);
+
+  res.send(card);
 }

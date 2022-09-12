@@ -1,5 +1,9 @@
 import { Request, Response } from 'express';
-import { createWifi, findWifiFromUserId } from '../services/wifi.services';
+import {
+  createWifi,
+  findWifiByIdAndUserId,
+  findWifiFromUserId,
+} from '../services/wifi.services';
 import { HttpStatus } from '../types/http.types';
 import { UserData } from '../types/user.types';
 import {
@@ -26,6 +30,15 @@ export async function getAll(req: Request, res: Response) {
   const { id: userId }: UserData = res.locals.user;
 
   const wifi: WiFiResponseData[] = await findWifiFromUserId(userId);
+
+  res.send(wifi);
+}
+
+export async function getById(req: Request, res: Response) {
+  const { id: userId }: UserData = res.locals.user;
+  const wifiId: number = Number(req.params.id);
+
+  const wifi: WiFiResponseData = await findWifiByIdAndUserId(userId, wifiId);
 
   res.send(wifi);
 }

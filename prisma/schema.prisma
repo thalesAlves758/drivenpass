@@ -60,10 +60,10 @@ enum Type {
 model Card {
   id             Int     @id @default(autoincrement())
   tag            String  @db.VarChar(50)
-  number         String  @db.VarChar(16)
-  cardholderName String  @db.VarChar(35)
-  securityCode   String  @db.Char(3)
-  password       String  @db.VarChar(6)
+  number         String  @db.VarChar(25)
+  cardholderName String  @db.VarChar(50)
+  securityCode   String
+  password       String
   virtual        Boolean @default(false)
   type           Type
   User           User    @relation(fields: [userId], references: [id])

@@ -1,7 +1,11 @@
 import { Card } from '@prisma/client';
 import { HttpError } from '../exceptions/HttpException';
-import { findByTagAndUserId, insert } from '../repositories/card.repository';
-import { CardInsertData } from '../types/card.types';
+import {
+  findByTagAndUserId,
+  findFromUserId,
+  insert,
+} from '../repositories/card.repository';
+import { CardInsertData, CardResponseData } from '../types/card.types';
 import { HttpErrorType } from '../types/http.types';
 import { encryptText } from '../utils/cryptrFunctions';
 
@@ -28,4 +32,19 @@ export async function createCard(insertData: CardInsertData): Promise<void> {
   };
 
   await insert(newCard);
+}
+
+export async function findCardsFromUserId(
+  userId: number
+): Promise<CardResponseData[]> {
+  return (await findFromUserId(userId, {
+    id: true,
+    tag: true,
+    number: true,
+    cardholderName: true,
+    securityCode: true,
+    password: true,
+    virtual: true,
+    type: true,
+  })) as CardResponseData[];
 }

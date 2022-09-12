@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import {
   createCard,
+  deleteCardById,
   findCardByIdAndUserId,
   findCardsFromUserId,
 } from '../services/card.services';
@@ -41,4 +42,13 @@ export async function getById(req: Request, res: Response) {
   const card: CardResponseData = await findCardByIdAndUserId(userId, cardId);
 
   res.send(card);
+}
+
+export async function deleteById(req: Request, res: Response) {
+  const { id: userId }: UserData = res.locals.user;
+  const cardId: number = Number(req.params.id);
+
+  await deleteCardById(userId, cardId);
+
+  res.sendStatus(HttpStatus.NO_CONTENT);
 }

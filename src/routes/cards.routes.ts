@@ -12,5 +12,6 @@ cardsRouter.post(
   validateSchema(cardSchema),
   cardController.create
 );
+cardsRouter.get('/cards', validateToken, cardController.getAll);
 
 export default cardsRouter;

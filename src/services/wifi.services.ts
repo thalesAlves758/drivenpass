@@ -1,4 +1,10 @@
-import { findFromUserId, insert } from '../repositories/wifi.repository';
+import { HttpError } from '../exceptions/HttpException';
+import {
+  findByIdAndUserId,
+  findFromUserId,
+  insert,
+} from '../repositories/wifi.repository';
+import { HttpErrorType } from '../types/http.types';
 import { WiFInsertData, WiFiResponseData } from '../types/wifi.types';
 import { decryptText, encryptText } from '../utils/cryptrFunctions';
 
@@ -31,4 +37,40 @@ export async function findWifiFromUserId(
       tag: true,
     })) as WiFiResponseData[]
   );
+}
+
+async function getWifiIfExists(
+  userId: number,
+  wifiId: number
+): Promise<WiFiResponseData> {
+  const wifi: WiFiResponseData | null = (await findByIdAndUserId(
+    userId,
+    wifiId,
+    {
+      id: true,
+      name: true,
+      password: true,
+      tag: true,
+    }
+  )) as WiFiResponseData | null;
+
+  if (!wifi) {
+    throw HttpError(
+      HttpErrorType.NOT_FOUND,
+      `Could not find specified safe note`
+    );
+  }
+
+  return wifi;
+}
+
+export async function findWifiByIdAndUserId(
+  userId: number,
+  wifiId: number
+): Promise<WiFiResponseData> {
+  const wifi: WiFiResponseData = await getWifiIfExists(userId, wifiId);
+
+  const [mappedWifi] = decryptPasswords([wifi]);
+
+  return mappedWifi;
 }

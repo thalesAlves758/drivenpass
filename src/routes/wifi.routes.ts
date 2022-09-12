@@ -12,5 +12,6 @@ wifiRouter.post(
   validateSchema(wifiSchema),
   wifiController.create
 );
+wifiRouter.get('/wifi', validateToken, wifiController.getAll);
 
 export default wifiRouter;

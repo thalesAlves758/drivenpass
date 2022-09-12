@@ -91,7 +91,11 @@ export async function findCardByIdAndUserId(
   userId: number,
   cardId: number
 ): Promise<CardResponseData> {
-  return getCardIfExists(userId, cardId);
+  const card: CardResponseData = await getCardIfExists(userId, cardId);
+
+  const [mappedCard] = decryptDataFromCards([card]);
+
+  return mappedCard;
 }
 
 export async function deleteCardById(

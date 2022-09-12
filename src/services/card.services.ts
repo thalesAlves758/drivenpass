@@ -1,6 +1,7 @@
 import { Card } from '@prisma/client';
 import { HttpError } from '../exceptions/HttpException';
 import {
+  deleteById,
   findByIdAndUserId,
   findByTagAndUserId,
   findFromUserId,
@@ -81,4 +82,13 @@ export async function findCardByIdAndUserId(
   cardId: number
 ): Promise<CardResponseData> {
   return getCardIfExists(userId, cardId);
+}
+
+export async function deleteCardById(
+  userId: number,
+  cardId: number
+): Promise<void> {
+  await getCardIfExists(userId, cardId);
+
+  await deleteById(cardId);
 }

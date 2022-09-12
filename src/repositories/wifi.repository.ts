@@ -26,3 +26,20 @@ export async function findFromUserId(
 ): Promise<Partial<WiFi>[]> {
   return prisma.wiFi.findMany({ select: selectedFields, where: { userId } });
 }
+
+export async function findByIdAndUserId(
+  userId: number,
+  wifiId: number,
+  selectedFields: SelectFields = {
+    id: true,
+    tag: true,
+    password: true,
+    name: true,
+    userId: true,
+  }
+): Promise<Partial<WiFi> | null> {
+  return prisma.wiFi.findFirst({
+    select: selectedFields,
+    where: { userId, AND: { id: wifiId } },
+  });
+}

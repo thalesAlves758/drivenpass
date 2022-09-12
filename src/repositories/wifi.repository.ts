@@ -43,3 +43,7 @@ export async function findByIdAndUserId(
     where: { userId, AND: { id: wifiId } },
   });
 }
+
+export async function deleteById(wifiId: number): Promise<void> {
+  await prisma.wiFi.delete({ where: { id: wifiId } });
+}

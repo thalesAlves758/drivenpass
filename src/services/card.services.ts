@@ -9,7 +9,7 @@ import {
 } from '../repositories/card.repository';
 import { CardInsertData, CardResponseData } from '../types/card.types';
 import { HttpErrorType } from '../types/http.types';
-import { encryptText } from '../utils/cryptrFunctions';
+import { decryptText, encryptText } from '../utils/cryptrFunctions';
 
 async function validateCardExists(userId: number, tag: string): Promise<void> {
   const card: Card | null = await findByTagAndUserId(userId, tag);
@@ -36,19 +36,29 @@ export async function createCard(insertData: CardInsertData): Promise<void> {
   await insert(newCard);
 }
 
+function decryptDataFromCards(cards: CardResponseData[]): CardResponseData[] {
+  return cards.map((card) => ({
+    ...card,
+    password: decryptText(card.password),
+    securityCode: decryptText(card.securityCode),
+  }));
+}
+
 export async function findCardsFromUserId(
   userId: number
 ): Promise<CardResponseData[]> {
-  return (await findFromUserId(userId, {
-    id: true,
-    tag: true,
-    number: true,
-    cardholderName: true,
-    securityCode: true,
-    password: true,
-    virtual: true,
-    type: true,
-  })) as CardResponseData[];
+  return decryptDataFromCards(
+    (await findFromUserId(userId, {
+      id: true,
+      tag: true,
+      number: true,
+      cardholderName: true,
+      securityCode: true,
+      password: true,
+      virtual: true,
+      type: true,
+    })) as CardResponseData[]
+  );
 }
 
 async function getCardIfExists(

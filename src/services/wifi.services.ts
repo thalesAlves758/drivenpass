@@ -1,5 +1,6 @@
 import { HttpError } from '../exceptions/HttpException';
 import {
+  deleteById,
   findByIdAndUserId,
   findFromUserId,
   insert,
@@ -73,4 +74,13 @@ export async function findWifiByIdAndUserId(
   const [mappedWifi] = decryptPasswords([wifi]);
 
   return mappedWifi;
+}
+
+export async function deleteWifiById(
+  userId: number,
+  wifiId: number
+): Promise<void> {
+  await getWifiIfExists(userId, wifiId);
+
+  await deleteById(wifiId);
 }

@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { SafeNoteBodyData } from '../types/safeNode.types';
+import { SafeNoteBodyData } from '../types/safeNote.types';
 
 const TITLE_MAX_LENGTH = 50;
 const NOTE_MAX_LENGTH = 1000;

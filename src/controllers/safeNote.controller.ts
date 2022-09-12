@@ -10,7 +10,7 @@ import {
   SafeNoteBodyData,
   SafeNoteInsertData,
   SafeNoteResponseData,
-} from '../types/safeNode.types';
+} from '../types/safeNote.types';
 import { UserData } from '../types/user.types';
 
 export async function create(req: Request, res: Response) {

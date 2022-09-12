@@ -1,6 +1,6 @@
 import { SafeNote } from '@prisma/client';
 import { prisma } from '../config/database';
-import { SafeNoteInsertData } from '../types/safeNode.types';
+import { SafeNoteInsertData } from '../types/safeNote.types';
 
 export async function findByTitleAndUserId(
   userId: number,

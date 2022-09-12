@@ -44,3 +44,24 @@ export async function findFromUserId(
     where: { userId },
   });
 }
+
+export async function findByIdAndUserId(
+  userId: number,
+  cardId: number,
+  selectedFields: SelectFields = {
+    id: true,
+    tag: true,
+    number: true,
+    cardholderName: true,
+    securityCode: true,
+    password: true,
+    virtual: true,
+    type: true,
+    userId: true,
+  }
+): Promise<Partial<Card> | null> {
+  return prisma.card.findFirst({
+    select: selectedFields,
+    where: { userId, AND: { id: cardId } },
+  });
+}

@@ -18,19 +18,30 @@ export async function create(data: CredentialInsertData): Promise<void> {
   await prisma.credential.create({ data });
 }
 
-const selectFields = {
+type SelectFields = {
+  id?: boolean;
+  tag?: boolean;
+  url?: boolean;
+  username?: boolean;
+  password?: boolean;
+  userId?: boolean;
+};
+
+const selectedFieldsDefault = {
   id: true,
   tag: true,
   url: true,
   username: true,
   password: true,
+  userId: true,
 };
 
 export async function findFromUserId(
-  userId: number
-): Promise<CredentialResponseData[]> {
+  userId: number,
+  select: SelectFields = selectedFieldsDefault
+): Promise<Partial<CredentialResponseData>[]> {
   return prisma.credential.findMany({
-    select: selectFields,
+    select,
     where: { userId },
     orderBy: { id: 'desc' },
   });
@@ -38,10 +49,11 @@ export async function findFromUserId(
 
 export async function findByIdAndUserId(
   userId: number,
-  credentialId: number
-): Promise<CredentialResponseData | null> {
+  credentialId: number,
+  select: SelectFields = selectedFieldsDefault
+): Promise<Partial<CredentialResponseData> | null> {
   return prisma.credential.findFirst({
-    select: selectFields,
+    select,
     where: { userId, AND: { id: credentialId } },
   });
 }

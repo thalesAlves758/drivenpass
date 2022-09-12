@@ -56,17 +56,32 @@ function decryptPasswords(
 export async function findCredentialsFromUserId(
   userId: number
 ): Promise<CredentialResponseData[]> {
-  return decryptPasswords(await findFromUserId(userId));
+  return decryptPasswords(
+    (await findFromUserId(userId, {
+      id: true,
+      password: true,
+      tag: true,
+      url: true,
+      username: true,
+    })) as CredentialResponseData[]
+  );
 }
 
 async function getCredentialIfExists(
   userId: number,
   credentialId: number
 ): Promise<CredentialResponseData> {
-  const credential: CredentialResponseData | null = await findByIdAndUserId(
+  const credential: CredentialResponseData | null = (await findByIdAndUserId(
     userId,
-    credentialId
-  );
+    credentialId,
+    {
+      id: true,
+      password: true,
+      tag: true,
+      url: true,
+      username: true,
+    }
+  )) as CredentialResponseData | null;
 
   if (!credential) {
     throw HttpError(
